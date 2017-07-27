@@ -1,5 +1,6 @@
 package com.example.binghuiliu.moviecat;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +15,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     String[] mData = null;
 
-    public RecyclerViewAdapter(String[] data) {
+    private final LayoutInflater mLayoutInflater;
+
+    private OnItemClickListener mClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public RecyclerViewAdapter(Context context, String[] data, OnItemClickListener listener) {
         this.mData = data;
+        this.mLayoutInflater = LayoutInflater.from(context);
+        this.mClickListener = listener;
     }
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.recyclerview_item, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.recyclerview_item, parent, false);
         MovieViewHolder viewHolder = new MovieViewHolder(view);
         return viewHolder;
     }
@@ -43,11 +53,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public MovieViewHolder(View itemView) {
             super(itemView);
             myTextView = (TextView) itemView.findViewById(R.id.item_text);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
+            mClickListener.onItemClick(getAdapterPosition());
         }
     }
 }

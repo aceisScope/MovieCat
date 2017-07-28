@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.movie_list);
         int numberOfColumns = 2;
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
-        adapter = new RecyclerViewAdapter(this, null, this);
+        adapter = new RecyclerViewAdapter(this, this);
         recyclerView.setAdapter(adapter);
 
         loadMoviesData();
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             try {
                 URL url = new URL(urlString);
                 String result = networkUtils.getResponseFromHttpUrl(url);
-                Log.d(DEBUG, result);
+
                 JSONObject jObject = new JSONObject(result);
                 return jObject;
 
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                         JSONObject object = jsonArray.getJSONObject(i);
                         movies.add(object);
                     }
+                    adapter.setMovieData(movies);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

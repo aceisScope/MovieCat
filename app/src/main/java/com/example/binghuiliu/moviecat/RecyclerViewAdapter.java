@@ -7,15 +7,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 /**
  * Created by binghuiliu on 27/07/2017.
  */
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MovieViewHolder>{
 
-    String[] mData = null;
+    public ArrayList<JSONObject> movieData;
 
     private final LayoutInflater mLayoutInflater;
+
+    private final Context mContext;
 
     private OnItemClickListener mClickListener;
 
@@ -23,8 +30,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         void onItemClick(int position);
     }
 
-    public RecyclerViewAdapter(Context context, String[] data, OnItemClickListener listener) {
-        this.mData = data;
+    public RecyclerViewAdapter(Context context,  OnItemClickListener listener) {
+        this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
         this.mClickListener = listener;
     }
@@ -38,12 +45,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        holder.myTextView.setText(Integer.toString(position));
+        JSONObject jsonObject = movieData.get(position);
+        try {
+            String title = jsonObject.getString("original_title");
+            holder.myTextView.setText(title);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 20;
+        if (movieData == null) return 0;
+        return movieData.size();
+    }
+
+    public void setMovieData(ArrayList<JSONObject> data) {
+        this.movieData = data;
+        notifyDataSetChanged();
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

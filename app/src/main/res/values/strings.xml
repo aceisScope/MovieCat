@@ -3,4 +3,7 @@
 
     <string name="sort_popular">popular.desc</string>
     <string name="sort_rate">popularity.desc</string>
+
+    <string name="key_results">results</string>
+    <string name="key_original_title">original_title</string>
 </resources>

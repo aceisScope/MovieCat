@@ -72,4 +72,10 @@ public class NetworkUtils {
         }
     }
 
+    private static final String BASE_POST_URL = "http://image.tmdb.org/t/p/w185";
+
+    public static String getPostUrl(String posterPath) {
+        return BASE_POST_URL + posterPath;
+    }
+
 }

@@ -6,4 +6,5 @@
 
     <string name="key_results">results</string>
     <string name="key_original_title">original_title</string>
+    <string name="key_poster">poster_path</string>
 </resources>

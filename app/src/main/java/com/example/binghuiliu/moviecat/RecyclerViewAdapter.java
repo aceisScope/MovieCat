@@ -2,10 +2,15 @@ package com.example.binghuiliu.moviecat;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.binghuiliu.moviecat.utils.NetworkUtils;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,8 +52,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         JSONObject jsonObject = movieData.get(position);
         try {
-            String title = jsonObject.getString("original_title");
+            String title = jsonObject.getString(mContext.getString(R.string.key_original_title));
             holder.myTextView.setText(title);
+
+            String posterURL = NetworkUtils.getPostUrl(jsonObject.getString(mContext.getString(R.string.key_poster)));
+            Picasso.with(mContext).load(posterURL).into(holder.mImageView);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -69,9 +77,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public TextView myTextView;
 
+        public ImageView mImageView;
+
         public MovieViewHolder(View itemView) {
             super(itemView);
             myTextView = (TextView) itemView.findViewById(R.id.item_text);
+            mImageView = (ImageView) itemView.findViewById(R.id.poster_image);
             itemView.setOnClickListener(this);
         }
 

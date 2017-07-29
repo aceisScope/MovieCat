@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">MovieCat</string>
 
+    <string name="item_sort">Sort By</string>
+    <string name="item_popularity">Popularity</string>
+    <string name="item_rating">Rating</string>
+
     <string name="sort_popular">popular.desc</string>
     <string name="sort_rate">popularity.desc</string>
 

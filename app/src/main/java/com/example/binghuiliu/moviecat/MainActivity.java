@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.example.binghuiliu.moviecat.helpers.EndlessRecyclerOnScrollListener;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     private static final int INIT_PAGE = 1;
     private static final int NUMBER_OF_COLOMNS = 2;
+    private String sortBy;
 
     ArrayList<JSONObject> movies = new ArrayList<JSONObject>();
 
@@ -35,8 +39,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sortBy = getString(R.string.sort_popular);
+
         initRecyclerView();
-        loadMoviesData(INIT_PAGE);
+        initLoadMovieData();
     }
 
     private void initRecyclerView() {
@@ -57,14 +63,46 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         recyclerView.addOnScrollListener(onScrollListener);
     }
 
-    private void loadMoviesData(int page) {
+    private void initLoadMovieData() {
+        movies.clear();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
         onScrollListener.resetState();
-        new WebTask(page).execute(getString(R.string.sort_popular));
+
+        loadMoviesData(INIT_PAGE);
+    }
+
+    private void loadMoviesData(int page) {
+        new WebTask(page).execute(sortBy);
     }
 
     @Override
     public void onItemClick(int position) {
         Log.d(DEBUG, "Click on " + Integer.toString(position));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String old_sortBy = sortBy;
+        if (item.getItemId() == R.id.item_popularity) {
+            sortBy = getString(R.string.sort_popular);
+        } else if (item.getItemId() == R.id.item_rating) {
+            sortBy = getString(R.string.sort_rate);
+        }
+
+        if (!old_sortBy.equals(sortBy)) {
+            initLoadMovieData();
+        }
+
+        return true;
     }
 
     private class WebTask extends AsyncTask<String, Void, JSONObject> {

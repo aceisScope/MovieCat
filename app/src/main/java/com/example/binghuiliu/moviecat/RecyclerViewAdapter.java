@@ -57,6 +57,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             String posterURL = NetworkUtils.getPostUrl(jsonObject.getString(mContext.getString(R.string.key_poster)));
             Picasso.with(mContext).load(posterURL).into(holder.mImageView);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

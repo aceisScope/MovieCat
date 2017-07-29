@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
+    private EndlessRecyclerOnScrollListener onScrollListener;
 
     private static final int INIT_PAGE = 1;
     private static final int NUMBER_OF_COLOMNS = 2;
@@ -46,16 +47,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         adapter = new RecyclerViewAdapter(this, this);
         recyclerView.setAdapter(adapter);
 
-        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
+        onScrollListener = new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.d(DEBUG, "onLoadMore: " + page + " " + totalItemsCount);
-                loadMoviesData(++page);
+                Log.d(DEBUG, "onLoadMore: " + page + " item count: " + totalItemsCount);
+                loadMoviesData(page);
             }
-        });
+        };
+        recyclerView.addOnScrollListener(onScrollListener);
     }
 
     private void loadMoviesData(int page) {
+        onScrollListener.resetState();
         new WebTask(page).execute(getString(R.string.sort_popular));
     }
 

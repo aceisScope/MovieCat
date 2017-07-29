@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
 
+    private static final int INIT_PAGE = 1;
+    private static final int NUMBER_OF_COLOMNS = 2;
+
     ArrayList<JSONObject> movies = new ArrayList<JSONObject>();
 
     @Override
@@ -32,14 +35,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         setContentView(R.layout.activity_main);
 
         initRecyclerView();
-        loadMoviesData(1);
+        loadMoviesData(INIT_PAGE);
     }
 
     private void initRecyclerView() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.movie_list);
 
-        int numberOfColumns = 2;
-        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, NUMBER_OF_COLOMNS);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new RecyclerViewAdapter(this, this);
         recyclerView.setAdapter(adapter);

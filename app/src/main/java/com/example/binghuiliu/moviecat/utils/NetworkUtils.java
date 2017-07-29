@@ -30,6 +30,7 @@ public class NetworkUtils {
 
     private final String api_key = "api_key";
     private final String sort_by = "sort_by";
+    private final String current_page = "page";
     private final String api_key_value;
 
     public NetworkUtils(Context context) {
@@ -37,7 +38,7 @@ public class NetworkUtils {
         this.api_key_value = context.getString(R.string.key_value);
     }
 
-    public String discoverUrlSortBy(String sort) {
+    public String discoverUrlSortBy(String sort, int page) {
         Uri.Builder builder = new Uri.Builder();
 
         builder.scheme("https")
@@ -46,7 +47,8 @@ public class NetworkUtils {
                 .appendPath(discover)
                 .appendPath(movile)
                 .appendQueryParameter(sort_by, sort)
-                .appendQueryParameter(api_key, api_key_value);
+                .appendQueryParameter(api_key, api_key_value)
+                .appendQueryParameter(current_page, Integer.toString(page));
 
         String myURL = builder.build().toString();
 

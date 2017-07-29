@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.binghuiliu.moviecat.helpers.EndlessRecyclerOnScrollListener;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
 
 import org.json.JSONArray;
@@ -30,17 +31,30 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initRecyclerView();
+        loadMoviesData(1);
+    }
+
+    private void initRecyclerView() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.movie_list);
+
         int numberOfColumns = 2;
-        recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns);
+        recyclerView.setLayoutManager(layoutManager);
         adapter = new RecyclerViewAdapter(this, this);
         recyclerView.setAdapter(adapter);
 
-        loadMoviesData();
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.d(DEBUG, "onLoadMore: " + page + " " + totalItemsCount);
+                loadMoviesData(++page);
+            }
+        });
     }
 
-    private void loadMoviesData() {
-        new WebTask().execute(getString(R.string.sort_popular));
+    private void loadMoviesData(int page) {
+        new WebTask(page).execute(getString(R.string.sort_popular));
     }
 
     @Override
@@ -50,6 +64,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     private class WebTask extends AsyncTask<String, Void, JSONObject> {
 
+        private int mPage = 1;
+
+        WebTask(int page) {
+            this.mPage = page;
+        }
+
         @Override
         protected JSONObject doInBackground(String... params) {
             if (params.length == 0) {
@@ -57,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             }
 
             NetworkUtils networkUtils = new NetworkUtils(MainActivity.this);
-            String urlString = networkUtils.discoverUrlSortBy(params[0]);
+            String urlString = networkUtils.discoverUrlSortBy(params[0], mPage);
             Log.d(DEBUG, urlString);
 
             try {

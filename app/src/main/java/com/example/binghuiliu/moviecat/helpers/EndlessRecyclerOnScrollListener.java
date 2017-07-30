@@ -1,7 +1,7 @@
 package com.example.binghuiliu.moviecat.helpers;
 
 /**
- * Created by binghuiliu on 29/07/2017.
+ * https://gist.github.com/nesquena/d09dc68ff07e845cc622 
  */
 
 import android.support.v7.widget.GridLayoutManager;

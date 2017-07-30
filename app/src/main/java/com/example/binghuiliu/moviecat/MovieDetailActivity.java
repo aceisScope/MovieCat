@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -62,6 +64,19 @@ public class MovieDetailActivity extends AppCompatActivity {
             Picasso.with(this).load(posterURL).into(posterImageView);
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setSubviewsVisibility(int visibility) {
+        titleTextView.setVisibility(visibility);
+        overviewTextView.setVisibility(visibility);
+        rateTextView.setVisibility(visibility);
+        releaseTextView.setVisibility(visibility);
+        posterImageView.setVisibility(visibility);
+
+        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
+        for (int i = viewGroup.getChildCount() - 1; i >= 0; i--) {
+
         }
     }
 

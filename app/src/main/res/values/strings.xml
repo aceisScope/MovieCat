@@ -15,4 +15,6 @@
     <string name="key_overview">overview</string>
     <string name="key_release_date">release_date</string>
     <string name="key_user_rate">vote_average</string>
+
+    <string name="poster_description">this is a movie poster</string>
 </resources>

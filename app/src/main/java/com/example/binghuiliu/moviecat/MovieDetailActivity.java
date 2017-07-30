@@ -30,6 +30,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView rateTextView;
     private TextView releaseTextView;
     private ImageView posterImageView;
+    private TextView errorTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         rateTextView = (TextView) findViewById(R.id.text_rate);
         releaseTextView = (TextView) findViewById(R.id.text_release);
         posterImageView = (ImageView) findViewById(R.id.image_poster);
+        errorTextView = (TextView) findViewById(R.id.text_error);
 
         Intent intent = getIntent();
         if (intent.hasExtra(Intent.EXTRA_TEXT)) {
@@ -62,22 +64,18 @@ public class MovieDetailActivity extends AppCompatActivity {
 
             String posterURL = NetworkUtils.getPostUrl(movieDetails.getString(getString(R.string.key_poster)));
             Picasso.with(this).load(posterURL).into(posterImageView);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void setSubviewsVisibility(int visibility) {
+    public void setDisplaySubviewsVisibility(int visibility) {
         titleTextView.setVisibility(visibility);
         overviewTextView.setVisibility(visibility);
         rateTextView.setVisibility(visibility);
         releaseTextView.setVisibility(visibility);
         posterImageView.setVisibility(visibility);
-
-        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
-        for (int i = viewGroup.getChildCount() - 1; i >= 0; i--) {
-
-        }
     }
 
     private class WebTask extends AsyncTask<String, Void, JSONObject> {
@@ -110,6 +108,9 @@ public class MovieDetailActivity extends AppCompatActivity {
             if (jsonObject != null) {
                 movieDetails = jsonObject;
                 displayMovieDetails();
+            } else {
+                errorTextView.setVisibility(View.VISIBLE);
+                setDisplaySubviewsVisibility(View.INVISIBLE);
             }
         }
     }

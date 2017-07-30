@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sortBy = getString(R.string.sort_rate);
+        sortBy = getString(R.string.sort_popular);
 
         initRecyclerView();
         initLoadMovieData();

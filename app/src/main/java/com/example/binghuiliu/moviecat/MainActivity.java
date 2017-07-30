@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.binghuiliu.moviecat.helpers.EndlessRecyclerOnScrollListener;
+import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
 
 import org.json.JSONArray;
@@ -23,8 +24,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener{
 
-    private final String DEBUG = "DEBUG";
-
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private EndlessRecyclerOnScrollListener onScrollListener;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private static final int NUMBER_OF_COLOMNS = 2;
     private String sortBy;
 
-    ArrayList<JSONObject> movies = new ArrayList<JSONObject>();
+    private ArrayList<JSONObject> movies = new ArrayList<JSONObject>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         onScrollListener = new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.d(DEBUG, "onLoadMore: " + page + " item count: " + totalItemsCount);
+                Log.d(GlobalConstants.DEBUG, "onLoadMore: " + page + " item count: " + totalItemsCount);
                 loadMoviesData(page);
             }
         };
@@ -80,10 +79,16 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     @Override
     public void onItemClick(int position) {
-        Log.d(DEBUG, "Click on " + Integer.toString(position));
+        Log.d(GlobalConstants.DEBUG, "Click on " + Integer.toString(position));
 
-        Intent intent = new Intent(this, MovieDetailActivity.class);
-        startActivity(intent);
+        try {
+            String movieID = movies.get(position).getString(getString(R.string.key_id));
+            Intent intent = new Intent(this, MovieDetailActivity.class);
+            intent.putExtra(Intent.EXTRA_TEXT, movieID);
+            startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -125,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
             NetworkUtils networkUtils = new NetworkUtils(MainActivity.this);
             String urlString = networkUtils.discoverUrlSortBy(params[0], mPage);
-            Log.d(DEBUG, urlString);
+            Log.d(GlobalConstants.DEBUG, "get url:" + urlString);
 
             try {
                 URL url = new URL(urlString);

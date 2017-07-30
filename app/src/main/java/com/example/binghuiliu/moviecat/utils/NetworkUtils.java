@@ -24,7 +24,7 @@ public class NetworkUtils {
     private final String authority = "api.themoviedb.org";
     private final String v3 = "3";
     private final String discover = "discover";
-    private final String movile = "movie";
+    private final String movie = "movie";
 
     private final Context mContext;
 
@@ -45,10 +45,25 @@ public class NetworkUtils {
                 .authority(authority)
                 .appendPath(v3)
                 .appendPath(discover)
-                .appendPath(movile)
+                .appendPath(movie)
                 .appendQueryParameter(sort_by, sort)
                 .appendQueryParameter(api_key, api_key_value)
                 .appendQueryParameter(current_page, Integer.toString(page));
+
+        String myURL = builder.build().toString();
+
+        return myURL;
+    }
+
+    public String movieDetailUrlBy(String id) {
+        Uri.Builder builder = new Uri.Builder();
+
+        builder.scheme("https")
+                .authority(authority)
+                .appendPath(v3)
+                .appendPath(movie)
+                .appendPath(id)
+                .appendQueryParameter(api_key, api_key_value);
 
         String myURL = builder.build().toString();
 

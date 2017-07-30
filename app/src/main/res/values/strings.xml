@@ -12,4 +12,7 @@
     <string name="key_id">id</string>
     <string name="key_original_title">original_title</string>
     <string name="key_poster">poster_path</string>
+    <string name="key_overview">overview</string>
+    <string name="key_release_date">release_date</string>
+    <string name="key_user_rate">vote_average</string>
 </resources>

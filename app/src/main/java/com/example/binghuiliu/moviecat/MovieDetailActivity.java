@@ -5,10 +5,12 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +24,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     private JSONObject movieDetails = null;
 
     private TextView titleTextView;
+    private TextView overviewTextView;
+    private TextView rateTextView;
+    private TextView releaseTextView;
+    private ImageView posterImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +35,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
 
         titleTextView = (TextView) findViewById(R.id.text_title);
+        overviewTextView = (TextView) findViewById(R.id.text_overview);
+        rateTextView = (TextView) findViewById(R.id.text_rate);
+        releaseTextView = (TextView) findViewById(R.id.text_release);
+        posterImageView = (ImageView) findViewById(R.id.image_poster);
 
         Intent intent = getIntent();
         if (intent.hasExtra(Intent.EXTRA_TEXT)) {
@@ -44,6 +54,12 @@ public class MovieDetailActivity extends AppCompatActivity {
     public void displayMovieDetails() {
         try {
             titleTextView.setText(movieDetails.getString(getString(R.string.key_original_title)));
+            overviewTextView.setText(movieDetails.getString(getString(R.string.key_overview)));
+            rateTextView.setText(movieDetails.getString(getString(R.string.key_user_rate)));
+            releaseTextView.setText(movieDetails.getString(getString(R.string.key_release_date)));
+
+            String posterURL = NetworkUtils.getPostUrl(movieDetails.getString(getString(R.string.key_poster)));
+            Picasso.with(this).load(posterURL).into(posterImageView);
         } catch (JSONException e) {
             e.printStackTrace();
         }

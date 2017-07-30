@@ -1,5 +1,6 @@
 package com.example.binghuiliu.moviecat;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     public void onItemClick(int position) {
         Log.d(DEBUG, "Click on " + Integer.toString(position));
+
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        startActivity(intent);
     }
 
     @Override

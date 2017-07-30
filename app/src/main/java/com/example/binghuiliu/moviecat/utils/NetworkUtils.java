@@ -44,9 +44,8 @@ public class NetworkUtils {
         builder.scheme("https")
                 .authority(authority)
                 .appendPath(v3)
-                .appendPath(discover)
                 .appendPath(movie)
-                .appendQueryParameter(sort_by, sort)
+                .appendPath(sort)
                 .appendQueryParameter(api_key, api_key_value)
                 .appendQueryParameter(current_page, Integer.toString(page));
 

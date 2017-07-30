@@ -22,9 +22,12 @@ import org.json.JSONObject;
 import java.net.URL;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener{
 
-    private RecyclerView recyclerView;
+    @BindView(R.id.movie_list) RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private EndlessRecyclerOnScrollListener onScrollListener;
 
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         sortBy = getString(R.string.sort_popular);
 
@@ -46,8 +50,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     private void initRecyclerView() {
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.movie_list);
-
         GridLayoutManager layoutManager = new GridLayoutManager(this, NUMBER_OF_COLOMNS);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new RecyclerViewAdapter(this, this);

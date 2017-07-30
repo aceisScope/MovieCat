@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by binghuiliu on 27/07/2017.
@@ -76,14 +80,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView myTextView;
+        public @BindView(R.id.item_text) TextView myTextView;
 
-        public ImageView mImageView;
+        public @BindView(R.id.poster_image) ImageView mImageView;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-            myTextView = (TextView) itemView.findViewById(R.id.item_text);
-            mImageView = (ImageView) itemView.findViewById(R.id.poster_image);
+            ButterKnife.bind(this, itemView);
+
             itemView.setOnClickListener(this);
         }
 

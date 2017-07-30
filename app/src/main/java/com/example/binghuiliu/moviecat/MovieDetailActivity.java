@@ -20,29 +20,26 @@ import org.json.JSONObject;
 
 import java.net.URL;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MovieDetailActivity extends AppCompatActivity {
 
     private String movieId = null;
     private JSONObject movieDetails = null;
 
-    private TextView titleTextView;
-    private TextView overviewTextView;
-    private TextView rateTextView;
-    private TextView releaseTextView;
-    private ImageView posterImageView;
-    private TextView errorTextView;
+    @BindView(R.id.text_title) TextView titleTextView;
+    @BindView(R.id.text_overview) TextView overviewTextView;
+    @BindView(R.id.text_rate) TextView rateTextView;
+    @BindView(R.id.text_release) TextView releaseTextView;
+    @BindView(R.id.image_poster) ImageView posterImageView;
+    @BindView(R.id.text_error) TextView errorTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-
-        titleTextView = (TextView) findViewById(R.id.text_title);
-        overviewTextView = (TextView) findViewById(R.id.text_overview);
-        rateTextView = (TextView) findViewById(R.id.text_rate);
-        releaseTextView = (TextView) findViewById(R.id.text_release);
-        posterImageView = (ImageView) findViewById(R.id.image_poster);
-        errorTextView = (TextView) findViewById(R.id.text_error);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         if (intent.hasExtra(Intent.EXTRA_TEXT)) {

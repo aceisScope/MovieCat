@@ -13,6 +13,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 /**
  * Created by binghuiliu on 28/07/2017.
  */
@@ -69,25 +75,16 @@ public class NetworkUtils {
         return myURL;
     }
 
+    OkHttpClient client = new OkHttpClient();
+
     public String getResponseFromHttpUrl(URL url) throws IOException {
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setConnectTimeout(10000);
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
 
-        try {
-            InputStream in = urlConnection.getInputStream();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
 
-            Scanner scanner = new Scanner(in);
-            scanner.useDelimiter("\\A");
-
-            boolean hasInput = scanner.hasNext();
-            if (hasInput) {
-                return scanner.next();
-            } else {
-                return null;
-            }
-        } finally {
-            urlConnection.disconnect();
-        }
     }
 
     private static final String BASE_POST_URL = "http://image.tmdb.org/t/p/w342";

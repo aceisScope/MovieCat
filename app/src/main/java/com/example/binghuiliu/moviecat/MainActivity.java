@@ -83,14 +83,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public void onItemClick(int position) {
         Log.d(GlobalConstants.DEBUG, "Click on " + Integer.toString(position));
 
-        try {
-            String movieID = movies.get(position).getString(getString(R.string.key_id));
-            Intent intent = new Intent(this, MovieDetailActivity.class);
-            intent.putExtra(Intent.EXTRA_TEXT, movieID);
-            startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject movie = movies.get(position);
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT, movie.toString());
+        startActivity(intent);
     }
 
     @Override

@@ -43,14 +43,16 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-            movieId = intent.getStringExtra(Intent.EXTRA_TEXT);
-            getMovieDetail();
+            try {
+                movieDetails = new JSONObject(intent.getStringExtra(Intent.EXTRA_TEXT));
+                displayMovieDetails();
+            } catch (JSONException e) {
+                setDisplaySubviewsInvisible();
+                e.printStackTrace();
+            }
         }
     }
 
-    private void getMovieDetail() {
-        new WebTask().execute(movieId);
-    }
 
     public void displayMovieDetails() {
         try {
@@ -67,48 +69,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void setDisplaySubviewsVisibility(int visibility) {
+    public void setDisplaySubviewsInvisible() {
+        int visibility = View.INVISIBLE;
         titleTextView.setVisibility(visibility);
         overviewTextView.setVisibility(visibility);
         rateTextView.setVisibility(visibility);
         releaseTextView.setVisibility(visibility);
         posterImageView.setVisibility(visibility);
-    }
 
-    private class WebTask extends AsyncTask<String, Void, JSONObject> {
-
-        @Override
-        protected JSONObject doInBackground(String... params) {
-            if (params.length == 0) {
-                return null;
-            }
-
-            NetworkUtils networkUtils = new NetworkUtils(MovieDetailActivity.this);
-            String urlString = networkUtils.movieDetailUrlBy(params[0]);
-            Log.d(GlobalConstants.DEBUG, "get url:" + urlString);
-
-            try {
-                URL url = new URL(urlString);
-                String result = networkUtils.getResponseFromHttpUrl(url);
-
-                JSONObject jObject = new JSONObject(result);
-                return jObject;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-            if (jsonObject != null) {
-                movieDetails = jsonObject;
-                displayMovieDetails();
-            } else {
-                errorTextView.setVisibility(View.VISIBLE);
-                setDisplaySubviewsVisibility(View.INVISIBLE);
-            }
-        }
+        errorTextView.setVisibility(View.VISIBLE);
     }
 }

@@ -16,8 +16,8 @@ import org.json.JSONObject;
  */
 
 public class Movie implements Parcelable {
-    public int vote_count;
     public int id;
+    public int vote_count;
     public String title;
     public String poster_path;
     public String original_title;

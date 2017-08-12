@@ -26,6 +26,10 @@
             android:parentActivityName=".MainActivity"
             >
         </activity>
+        <provider
+            android:authorities="com.example.binghuiliu.moviecat"
+            android:name=".data.MovieContentProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

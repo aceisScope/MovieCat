@@ -1,5 +1,7 @@
 package com.example.binghuiliu.moviecat.data;
 
+import android.content.ContentUris;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -7,6 +9,10 @@ import android.provider.BaseColumns;
  */
 
 public class MovieContract {
+
+    public static final String CONTENT_AUTHORITY = "com.example.binghuiliu.moviecat";
+    public static final String PATH_MOVIE = "movie";
+
     public static final class MovieEntry implements BaseColumns {
         public static final String TABLE_NAME = "movie";
 
@@ -18,5 +24,11 @@ public class MovieContract {
         public static final String COLUMN_RELEASE_DATE = "release_date";
         public static final String COLUMN_VOTE_AVERAGE = "vote_average";
         public static final String COLUMN_OVERVIEW = "overview";
+
+        public static final Uri CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY + "/movie");
+
+        public static Uri buildMovieUriWithId(int id) {
+            return CONTENT_URI.buildUpon().appendPath(Long.toString(id)).build();
+        }
     }
 }

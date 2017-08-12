@@ -1,0 +1,81 @@
+package com.example.binghuiliu.moviecat.data;
+
+import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
+import com.example.binghuiliu.moviecat.R;
+import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * Created by binghuiliu on 12/08/2017.
+ */
+
+public class Movie implements Parcelable {
+    public int vote_count;
+    public int id;
+    public String title;
+    public String poster_path;
+    public String original_title;
+    public String overView;
+    public String release_date;
+    public double vote_average;
+
+    public Movie(Context context, JSONObject movie) throws JSONException {
+        vote_count = movie.getInt(context.getString(R.string.key_vote_count));
+        id = movie.getInt(context.getString(R.string.key_id));
+        title = movie.getString(context.getString(R.string.key_title));
+        original_title = movie.getString(context.getString(R.string.key_original_title));
+        poster_path = movie.getString(context.getString(R.string.key_poster));
+        overView = movie.getString(context.getString(R.string.key_overview));
+        vote_average = movie.getDouble(context.getString(R.string.key_user_rate));
+        release_date = movie.getString(context.getString(R.string.key_release_date));
+    }
+
+    public Movie() {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.vote_count);
+        dest.writeInt(this.id);
+        dest.writeString(this.title);
+        dest.writeString(this.poster_path);
+        dest.writeString(this.original_title);
+        dest.writeString(this.overView);
+        dest.writeString(this.release_date);
+        dest.writeDouble(this.vote_average);
+    }
+
+    protected Movie(Parcel in) {
+        this.vote_count = in.readInt();
+        this.id = in.readInt();
+        this.title = in.readString();
+        this.poster_path = in.readString();
+        this.original_title = in.readString();
+        this.overView = in.readString();
+        this.release_date = in.readString();
+        this.vote_average = in.readDouble();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+}

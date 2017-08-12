@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.binghuiliu.moviecat.data.Movie;
 import com.example.binghuiliu.moviecat.helpers.EndlessRecyclerOnScrollListener;
 import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
@@ -35,8 +36,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private static final int NUMBER_OF_COLOMNS = 2;
     private String sortBy;
 
-    private ArrayList<JSONObject> movies = new ArrayList<JSONObject>();
-    private String jsonResult;
+    private ArrayList<Movie> movies = new ArrayList<Movie>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,27 +56,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     private void persistState(Bundle savedInstanceState) {
         sortBy = savedInstanceState.getString(getString(R.string.key_sort_by));
-        jsonResult = savedInstanceState.getString(getString(R.string.key_movies_json));
-
-        parseMovieJson(jsonResult);
-    }
-
-    private void parseMovieJson(String jsonResult) {
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = (new JSONObject(jsonResult)).getJSONArray(getString(R.string.key_results));
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject object = jsonArray.getJSONObject(i);
-                movies.add(object);
-            }
-            Log.d(GlobalConstants.DEBUG, "jsonArray " + jsonArray.toString());
-            Log.d(GlobalConstants.DEBUG, "movies " + movies.toString());
-            if (movies != null) {
-                adapter.setMovieData(movies);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        movies = savedInstanceState.getParcelableArrayList(getString(R.string.key_movies));
+        adapter.setMovieData(movies);
     }
 
     private void initRecyclerView() {
@@ -113,9 +94,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public void onItemClick(int position) {
         Log.d(GlobalConstants.DEBUG, "Click on " + Integer.toString(position));
 
-        JSONObject movie = movies.get(position);
+        Movie movie = movies.get(position);
         Intent intent = new Intent(this, MovieDetailActivity.class);
-        intent.putExtra(Intent.EXTRA_TEXT, movie.toString());
+        intent.putExtra(MovieDetailActivity.DETAIL_MOVIE, movie);
         startActivity(intent);
     }
 
@@ -164,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 URL url = new URL(urlString);
                 String result = networkUtils.getResponseFromHttpUrl(url);
                 JSONObject jObject = new JSONObject(result);
-                jsonResult = result;
                 return jObject;
 
             } catch (Exception e) {
@@ -180,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                     JSONArray jsonArray = jsonObject.getJSONArray(getString(R.string.key_results));
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
-                        movies.add(object);
+                        movies.add(new Movie(MainActivity.this, object));
                     }
                     adapter.setMovieData(movies);
                 } catch (JSONException e) {
@@ -193,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(getString(R.string.key_sort_by), sortBy);
-        outState.putString(getString(R.string.key_movies_json), jsonResult);
+        outState.putParcelableArrayList(getString(R.string.key_movies), movies);
         super.onSaveInstanceState(outState);
     }
 }

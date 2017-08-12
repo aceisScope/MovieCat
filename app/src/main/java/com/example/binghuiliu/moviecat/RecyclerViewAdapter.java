@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.binghuiliu.moviecat.data.Movie;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MovieViewHolder>{
 
-    public ArrayList<JSONObject> movieData;
+    public ArrayList<Movie> movieData;
 
     private final LayoutInflater mLayoutInflater;
 
@@ -54,17 +55,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        JSONObject jsonObject = movieData.get(position);
-        try {
-            String title = jsonObject.getString(mContext.getString(R.string.key_original_title));
-            holder.myTextView.setText(title);
+        Movie movie = movieData.get(position);
 
-            String posterURL = NetworkUtils.getPostUrl(jsonObject.getString(mContext.getString(R.string.key_poster)));
-            Picasso.with(mContext).load(posterURL).into(holder.mImageView);
+        String title = movie.title;
+        holder.myTextView.setText(title);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        String posterURL = NetworkUtils.getPostUrl(movie.poster_path);
+        Picasso.with(mContext).load(posterURL).into(holder.mImageView);
     }
 
     @Override
@@ -73,7 +70,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return movieData.size();
     }
 
-    public void setMovieData(ArrayList<JSONObject> data) {
+    public void setMovieData(ArrayList<Movie> data) {
         this.movieData = data;
         notifyDataSetChanged();
     }

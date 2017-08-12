@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.binghuiliu.moviecat.data.Movie;
 import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -25,8 +26,10 @@ import butterknife.ButterKnife;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
+    public static final String DETAIL_MOVIE = "detail_movie";
+
     private String movieId = null;
-    private JSONObject movieDetails = null;
+    private Movie movieDetails = null;
 
     @BindView(R.id.text_title) TextView titleTextView;
     @BindView(R.id.text_overview) TextView overviewTextView;
@@ -42,31 +45,22 @@ public class MovieDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-            try {
-                movieDetails = new JSONObject(intent.getStringExtra(Intent.EXTRA_TEXT));
-                displayMovieDetails();
-            } catch (JSONException e) {
-                setDisplaySubviewsInvisible();
-                e.printStackTrace();
-            }
+        if (intent.hasExtra(DETAIL_MOVIE)) {
+            movieDetails = intent.getParcelableExtra(DETAIL_MOVIE);
+            displayMovieDetails();
         }
     }
 
 
     public void displayMovieDetails() {
-        try {
-            titleTextView.setText(movieDetails.getString(getString(R.string.key_original_title)));
-            overviewTextView.setText(movieDetails.getString(getString(R.string.key_overview)));
-            rateTextView.setText(movieDetails.getString(getString(R.string.key_user_rate)));
-            releaseTextView.setText(movieDetails.getString(getString(R.string.key_release_date)));
+        Log.d(GlobalConstants.DEBUG, movieDetails.toString());
+        titleTextView.setText(movieDetails.title);
+        overviewTextView.setText(movieDetails.overView);
+        rateTextView.setText(Double.toString(movieDetails.vote_average));
+        releaseTextView.setText(movieDetails.release_date);
 
-            String posterURL = NetworkUtils.getPostUrl(movieDetails.getString(getString(R.string.key_poster)));
-            Picasso.with(this).load(posterURL).into(posterImageView);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        String posterURL = NetworkUtils.getPostUrl(movieDetails.poster_path);
+        Picasso.with(this).load(posterURL).into(posterImageView);
     }
 
     public void setDisplaySubviewsInvisible() {

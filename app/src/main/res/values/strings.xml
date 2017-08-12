@@ -8,10 +8,12 @@
     <string name="sort_popular">popular</string>
     <string name="sort_rate">top_rated</string>
     <string name="key_sort_by">key_sort_by</string>
-    <string name="key_movies_json">key_movies_json</string>
+    <string name="key_movies">key_movies</string>
 
     <string name="key_results">results</string>
     <string name="key_id">id</string>
+    <string name="key_vote_count">vote_count</string>
+    <string name="key_title">title</string>
     <string name="key_original_title">original_title</string>
     <string name="key_poster">poster_path</string>
     <string name="key_overview">overview</string>

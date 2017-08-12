@@ -70,8 +70,14 @@ public class MovieContentProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-
-        throw new RuntimeException("getType is not supported");
+        switch (mUriMatcher.match(uri)) {
+            case CODE_MOVIE:
+                return MovieContract.CONTENT_TYPE;
+            case CODE_MOVIE_WITH_ID:
+                return MovieContract.CONTENT_ITEM_TYPE;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
     }
 
     @Nullable

@@ -1,5 +1,6 @@
 package com.example.binghuiliu.moviecat.data;
 
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -12,6 +13,9 @@ public class MovieContract {
 
     public static final String CONTENT_AUTHORITY = "com.example.binghuiliu.moviecat";
     public static final String PATH_MOVIE = "movie";
+
+    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE;
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE;
 
     public static final class MovieEntry implements BaseColumns {
         public static final String TABLE_NAME = "movie";

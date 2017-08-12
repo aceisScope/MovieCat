@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private String sortBy;
 
     private ArrayList<JSONObject> movies = new ArrayList<JSONObject>();
+    private String jsonResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +44,39 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        sortBy = getString(R.string.sort_popular);
-
         initRecyclerView();
-        initLoadMovieData();
+
+        if (savedInstanceState != null) {
+            persistState(savedInstanceState);
+        } else {
+            sortBy = getString(R.string.sort_popular);
+            initLoadMovieData();
+        }
+    }
+
+    private void persistState(Bundle savedInstanceState) {
+        sortBy = savedInstanceState.getString(getString(R.string.key_sort_by));
+        jsonResult = savedInstanceState.getString(getString(R.string.key_movies_json));
+
+        parseMovieJson(jsonResult);
+    }
+
+    private void parseMovieJson(String jsonResult) {
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = (new JSONObject(jsonResult)).getJSONArray(getString(R.string.key_results));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject object = jsonArray.getJSONObject(i);
+                movies.add(object);
+            }
+            Log.d(GlobalConstants.DEBUG, "jsonArray " + jsonArray.toString());
+            Log.d(GlobalConstants.DEBUG, "movies " + movies.toString());
+            if (movies != null) {
+                adapter.setMovieData(movies);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initRecyclerView() {
@@ -133,8 +163,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             try {
                 URL url = new URL(urlString);
                 String result = networkUtils.getResponseFromHttpUrl(url);
-
                 JSONObject jObject = new JSONObject(result);
+                jsonResult = result;
                 return jObject;
 
             } catch (Exception e) {
@@ -158,5 +188,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 }
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(getString(R.string.key_sort_by), sortBy);
+        outState.putString(getString(R.string.key_movies_json), jsonResult);
+        super.onSaveInstanceState(outState);
     }
 }

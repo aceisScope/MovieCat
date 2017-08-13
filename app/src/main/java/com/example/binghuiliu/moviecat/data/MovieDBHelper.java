@@ -28,7 +28,8 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieContract.MovieEntry.COLUMN_OVERVIEW + " TEXT, " +
                 MovieContract.MovieEntry.COLUMN_VOTE_COUNT + " INTEGER, " +
                 MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " REAL, " +
-                MovieContract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT);";
+                MovieContract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT, " +
+                " UNIQUE (" + MovieContract.MovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
         db.execSQL(sqlCreate);
     }
 

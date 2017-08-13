@@ -63,7 +63,7 @@ public class MovieContentProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-
+        resultCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return resultCursor;
     }
 
@@ -108,7 +108,7 @@ public class MovieContentProvider extends ContentProvider {
         int result = 0;
 
         switch (mUriMatcher.match(uri)) {
-            case CODE_MOVIE:
+            case CODE_MOVIE_WITH_ID:
                 String movieIdString = uri.getLastPathSegment();
                 String[] selectionArguments = new String[]{movieIdString};
 

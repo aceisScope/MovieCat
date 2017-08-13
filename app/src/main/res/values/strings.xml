@@ -21,6 +21,11 @@
     <string name="key_user_rate">vote_average</string>
     <string name="key_status_code">status_code</string>
 
+    <string name="button_favor">Favor</string>
+    <string name="button_unfavor">Unfavor</string>
+
     <string name="error_description">Sorry, the detail information of this movie doesn\'t exist.</string>
     <string name="poster_description">this is a movie poster</string>
+    <string name="favor_description">You have marked this movie as favored!</string>
+    <string name="unfavor_description">You have marked this movie as unfavored!</string>
 </resources>

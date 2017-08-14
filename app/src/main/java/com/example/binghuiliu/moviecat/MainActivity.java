@@ -1,7 +1,12 @@
 package com.example.binghuiliu.moviecat;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.binghuiliu.moviecat.data.Movie;
+import com.example.binghuiliu.moviecat.data.MovieContract;
 import com.example.binghuiliu.moviecat.helpers.EndlessRecyclerOnScrollListener;
 import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
@@ -26,7 +32,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>{
 
     @BindView(R.id.movie_list) RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
@@ -37,6 +43,28 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private String sortBy;
 
     private ArrayList<Movie> movies = new ArrayList<Movie>();
+
+    private static final int ID_FAVORITE_MOVE_LOADER = 33;
+
+    private static final String[] MOVIE_COLUMNS = {
+            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
+            MovieContract.MovieEntry.COLUMN_TITLE,
+            MovieContract.MovieEntry.COLUMN_VOTE_COUNT,
+            MovieContract.MovieEntry.COLUMN_POSTER,
+            MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE,
+            MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
+            MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE,
+            MovieContract.MovieEntry.COLUMN_OVERVIEW
+    };
+
+    public final static int INDEX_MOVIE_ID = 0;
+    public final static int INDEX_TITLE = 1;
+    public final static int INDEX_VOTE_COUNT = 2;
+    public final static int INDEX_POSTER = 3;
+    public final static int INDEX_ORIGINAL_TITLE = 4;
+    public final static int INDEX_RELEASE_DATE = 5;
+    public final static int INDEX_VOTE_AVERAGE = 6;
+    public final static int INDEX_OVERVIEW = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,13 +142,46 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             sortBy = getString(R.string.sort_popular);
         } else if (item.getItemId() == R.id.item_rating) {
             sortBy = getString(R.string.sort_rate);
+        } else if (item.getItemId() == R.id.item_favor) {
+            sortBy = getString(R.string.sort_favor);
         }
 
-        if (!old_sortBy.equals(sortBy)) {
+        if (sortBy.equals(getString(R.string.sort_favor))) {
+            getSupportLoaderManager().initLoader(ID_FAVORITE_MOVE_LOADER, null, this);
+        } else if (!old_sortBy.equals(sortBy)) {
             initLoadMovieData();
         }
 
         return true;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case ID_FAVORITE_MOVE_LOADER:
+                Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+                return new CursorLoader(this, uri, MOVIE_COLUMNS, null, null, null);
+            default:
+                throw new RuntimeException("Loader Not Implemented: " + id);
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.moveToFirst()) {
+            movies.clear();
+            do {
+                Movie movie = new Movie(data);
+                movies.add(movie);
+            } while (data.moveToNext());
+
+            adapter.setMovieData(movies);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.setMovieData(null);
     }
 
     private class WebTask extends AsyncTask<String, Void, JSONObject> {

@@ -4,9 +4,11 @@
     <string name="item_sort">Sort By</string>
     <string name="item_popularity">Popularity</string>
     <string name="item_rating">Rating</string>
+    <string name="item_favor">Favorites</string>
 
     <string name="sort_popular">popular</string>
     <string name="sort_rate">top_rated</string>
+    <string name="sort_favor">favor</string>
     <string name="key_sort_by">key_sort_by</string>
     <string name="key_movies">key_movies</string>
 

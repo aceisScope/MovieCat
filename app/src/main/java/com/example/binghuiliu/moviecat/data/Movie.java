@@ -1,10 +1,12 @@
 package com.example.binghuiliu.moviecat.data;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.example.binghuiliu.moviecat.MainActivity;
 import com.example.binghuiliu.moviecat.R;
 import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
 
@@ -37,6 +39,17 @@ public class Movie implements Parcelable {
     }
 
     public Movie() {
+    }
+
+    public Movie(Cursor cursor) {
+        id = cursor.getInt(MainActivity.INDEX_MOVIE_ID);
+        title = cursor.getString(MainActivity.INDEX_TITLE);
+        vote_count = cursor.getInt(MainActivity.INDEX_VOTE_COUNT);
+        original_title = cursor.getString(MainActivity.INDEX_ORIGINAL_TITLE);
+        poster_path = cursor.getString(MainActivity.INDEX_POSTER);
+        overView = cursor.getString(MainActivity.INDEX_OVERVIEW);
+        vote_average = cursor.getDouble(MainActivity.INDEX_VOTE_AVERAGE);
+        release_date = cursor.getString(MainActivity.INDEX_RELEASE_DATE);
     }
 
     @Override

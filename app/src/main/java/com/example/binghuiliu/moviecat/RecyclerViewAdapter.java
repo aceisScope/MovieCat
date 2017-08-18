@@ -2,20 +2,15 @@ package com.example.binghuiliu.moviecat;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.binghuiliu.moviecat.data.Movie;
+import com.example.binghuiliu.moviecat.model.Movie;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 

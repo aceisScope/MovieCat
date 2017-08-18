@@ -31,6 +31,7 @@ public class NetworkUtils {
     private final String v3 = "3";
     private final String discover = "discover";
     private final String movie = "movie";
+    private final String review = "reviews";
 
     private final Context mContext;
 
@@ -69,6 +70,23 @@ public class NetworkUtils {
                 .appendPath(movie)
                 .appendPath(id)
                 .appendQueryParameter(api_key, api_key_value);
+
+        String myURL = builder.build().toString();
+
+        return myURL;
+    }
+
+    public String movieReviewUrlBy(String id, int page) {
+        Uri.Builder builder = new Uri.Builder();
+
+        builder.scheme("https")
+                .authority(authority)
+                .appendPath(v3)
+                .appendPath(movie)
+                .appendPath(id)
+                .appendPath(review)
+                .appendQueryParameter(api_key, api_key_value)
+                .appendQueryParameter(current_page, Integer.toString(page));
 
         String myURL = builder.build().toString();
 

@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.example.binghuiliu.moviecat.data.Movie;
+import com.example.binghuiliu.moviecat.model.Movie;
 import com.example.binghuiliu.moviecat.data.MovieContract;
 import com.example.binghuiliu.moviecat.helpers.EndlessRecyclerOnScrollListener;
 import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     private void loadMoviesData(int page) {
-        new WebTask(page).execute(sortBy);
+        new MovieWebTask(page).execute(sortBy);
     }
 
     @Override
@@ -184,11 +184,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         adapter.setMovieData(null);
     }
 
-    private class WebTask extends AsyncTask<String, Void, JSONObject> {
+    private class MovieWebTask extends AsyncTask<String, Void, JSONObject> {
 
         private int mPage = 1;
 
-        WebTask(int page) {
+        MovieWebTask(int page) {
             this.mPage = page;
         }
 

@@ -5,20 +5,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.LoaderManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.binghuiliu.moviecat.data.Movie;
-import com.example.binghuiliu.moviecat.data.MovieContract;
 import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
+import com.example.binghuiliu.moviecat.model.Movie;
+import com.example.binghuiliu.moviecat.data.MovieContract;
+import com.example.binghuiliu.moviecat.model.Review;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -27,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +39,9 @@ public class MovieDetailActivity extends AppCompatActivity {
     private Movie movieDetails = null;
 
     private boolean isFavorated = false;
+
+    private static int mReviewPage = 1;
+    private ArrayList<Review> reviews = new ArrayList<Review>();
 
     @BindView(R.id.text_title) TextView titleTextView;
     @BindView(R.id.text_overview) TextView overviewTextView;
@@ -65,6 +69,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
 
         new QueryFavoriteTask().execute();
+        new ReviewWebTask(mReviewPage).execute(Integer.toString(movieDetails.id));
     }
 
 
@@ -146,4 +151,49 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
     }
 
+    private class ReviewWebTask extends AsyncTask<String, Void, JSONObject> {
+        private int mPage = 1;
+
+        ReviewWebTask(int page) {
+            this.mPage = page;
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            if (params.length == 0) {
+                return null;
+            }
+
+            NetworkUtils networkUtils = new NetworkUtils(MovieDetailActivity.this);
+            String urlString = networkUtils.movieReviewUrlBy(params[0], mPage);
+            Log.d(GlobalConstants.DEBUG, "get url:" + urlString);
+
+            try {
+                URL url = new URL(urlString);
+                String result = networkUtils.getResponseFromHttpUrl(url);
+                JSONObject jObject = new JSONObject(result);
+                return jObject;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            if (jsonObject != null) {
+                try {
+                    JSONArray jsonArray = jsonObject.getJSONArray(getString(R.string.key_results));
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        reviews.add(new Review(MovieDetailActivity.this, object));
+                    }
+                    //adapter.setMovieData(movies);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.binghuiliu.moviecat;
+package com.example.binghuiliu.moviecat.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.binghuiliu.moviecat.R;
 import com.example.binghuiliu.moviecat.model.Movie;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -21,7 +22,7 @@ import butterknife.ButterKnife;
  * Created by binghuiliu on 27/07/2017.
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MovieViewHolder>{
+public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.MovieViewHolder>{
 
     public ArrayList<Movie> movieData;
 
@@ -35,7 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         void onItemClick(int position);
     }
 
-    public RecyclerViewAdapter(Context context,  OnItemClickListener listener) {
+    public MovieRecyclerViewAdapter(Context context, OnItemClickListener listener) {
         this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
         this.mClickListener = listener;
@@ -43,7 +44,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.recyclerview_item, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.movie_recyclerview_item, parent, false);
         MovieViewHolder viewHolder = new MovieViewHolder(view);
         return viewHolder;
     }

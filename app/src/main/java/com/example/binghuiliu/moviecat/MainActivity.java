@@ -21,6 +21,7 @@ import com.example.binghuiliu.moviecat.data.MovieContract;
 import com.example.binghuiliu.moviecat.helpers.EndlessRecyclerOnScrollListener;
 import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
+import com.example.binghuiliu.moviecat.view.MovieRecyclerViewAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,10 +33,10 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivity extends AppCompatActivity implements MovieRecyclerViewAdapter.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>{
 
     @BindView(R.id.movie_list) RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter;
+    private MovieRecyclerViewAdapter adapter;
     private EndlessRecyclerOnScrollListener onScrollListener;
 
     private static final int INIT_PAGE = 1;
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private void initRecyclerView() {
         GridLayoutManager layoutManager = new GridLayoutManager(this, NUMBER_OF_COLOMNS);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerViewAdapter(this, this);
+        adapter = new MovieRecyclerViewAdapter(this, this);
         recyclerView.setAdapter(adapter);
 
         onScrollListener = new EndlessRecyclerOnScrollListener(layoutManager) {

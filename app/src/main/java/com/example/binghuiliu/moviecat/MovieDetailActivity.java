@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +21,7 @@ import com.example.binghuiliu.moviecat.model.Movie;
 import com.example.binghuiliu.moviecat.data.MovieContract;
 import com.example.binghuiliu.moviecat.model.Review;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
+import com.example.binghuiliu.moviecat.view.ReviewRecyclerViewAdaper;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -36,12 +39,14 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     public static final String DETAIL_MOVIE = "detail_movie";
 
-    private Movie movieDetails = null;
-
     private boolean isFavorated = false;
 
     private static int mReviewPage = 1;
+
+    private Movie movieDetails = null;
     private ArrayList<Review> reviews = new ArrayList<Review>();
+
+    private ReviewRecyclerViewAdaper reviewAdapter;
 
     @BindView(R.id.text_title) TextView titleTextView;
     @BindView(R.id.text_overview) TextView overviewTextView;
@@ -50,6 +55,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     @BindView(R.id.image_poster) ImageView posterImageView;
     @BindView(R.id.text_error) TextView errorTextView;
     @BindView(R.id.button_favor) Button favorButton;
+    @BindView(R.id.review_list) RecyclerView reviewRecyclerView;
 
     public void setFavorated(Boolean favorated) {
         this.isFavorated = favorated;
@@ -68,12 +74,21 @@ public class MovieDetailActivity extends AppCompatActivity {
             displayMovieDetails();
         }
 
+        initReviewRecyclerView();
+
         new QueryFavoriteTask().execute();
         new ReviewWebTask(mReviewPage).execute(Integer.toString(movieDetails.id));
     }
 
+    private void initReviewRecyclerView() {
+        reviewAdapter = new ReviewRecyclerViewAdaper(this);
+        reviewRecyclerView.setAdapter(reviewAdapter);
+        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    public void displayMovieDetails() {
+        new ReviewWebTask(mReviewPage).execute();
+    }
+
+    private void displayMovieDetails() {
         titleTextView.setText(movieDetails.title);
         overviewTextView.setText(movieDetails.overView);
         rateTextView.setText(Double.toString(movieDetails.vote_average));
@@ -189,7 +204,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                         JSONObject object = jsonArray.getJSONObject(i);
                         reviews.add(new Review(MovieDetailActivity.this, object));
                     }
-                    //adapter.setMovieData(movies);
+                    reviewAdapter.setReviewDataData(reviews);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

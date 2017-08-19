@@ -56,7 +56,7 @@ public class ReviewRecyclerViewAdaper extends RecyclerView.Adapter<ReviewRecycle
         return reviewData.size();
     }
 
-    public void setReviewDataData(ArrayList<Review> data) {
+    public void setReviewData(ArrayList<Review> data) {
         this.reviewData = data;
         notifyDataSetChanged();
     }

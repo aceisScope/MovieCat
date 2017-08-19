@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="detail_padding">20dp</dimen>
-    <dimen name="detail_title_font">30sp</dimen>
+    <dimen name="detail_title_font">20sp</dimen>
 </resources>

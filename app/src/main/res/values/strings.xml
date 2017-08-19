@@ -25,6 +25,8 @@
     <string name="key_author">author</string>
     <string name="key_content">content</string>
     <string name="key_url">url</string>
+    <string name="key_key">key</string>
+    <string name="key_name">name</string>
 
     <string name="button_favor">Favor</string>
     <string name="button_unfavor">Unfavor</string>

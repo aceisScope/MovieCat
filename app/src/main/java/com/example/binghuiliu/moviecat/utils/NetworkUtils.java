@@ -32,6 +32,7 @@ public class NetworkUtils {
     private final String discover = "discover";
     private final String movie = "movie";
     private final String review = "reviews";
+    private final String trailer = "videos";
 
     private final Context mContext;
 
@@ -93,6 +94,22 @@ public class NetworkUtils {
         return myURL;
     }
 
+    public String movieTrailerUrlBy(String id) {
+        Uri.Builder builder = new Uri.Builder();
+
+        builder.scheme("https")
+                .authority(authority)
+                .appendPath(v3)
+                .appendPath(movie)
+                .appendPath(id)
+                .appendPath(trailer)
+                .appendQueryParameter(api_key, api_key_value);
+
+        String myURL = builder.build().toString();
+
+        return myURL;
+    }
+
     OkHttpClient client = new OkHttpClient();
 
     public String getResponseFromHttpUrl(URL url) throws IOException {
@@ -109,6 +126,12 @@ public class NetworkUtils {
 
     public static String getPostUrl(String posterPath) {
         return BASE_POST_URL + posterPath;
+    }
+
+    private static final String BASE_THUMBNAIL_URL = "https://img.youtube.com/vi/";
+
+    public static String getThumbnailUrl(String key) {
+        return BASE_THUMBNAIL_URL + key + "/hqdefault.jpg";
     }
 
 }

@@ -6,16 +6,6 @@
     android:orientation="vertical"
     tools:context="com.example.binghuiliu.moviecat.MovieDetailActivity">
 
-    <TextView
-        android:id="@+id/text_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="@dimen/detail_title_font"
-        android:padding="@dimen/detail_padding"
-        android:background="@color/colorTitleBackground"
-        android:textColor="@color/colorTitle"/>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -23,6 +13,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/trailer_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <LinearLayout
                 android:layout_margin="@dimen/detail_padding"
                 android:layout_width="match_parent"
@@ -42,6 +38,12 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     >
+                    <TextView
+                        android:id="@+id/text_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/detail_title_font"
+                        />
                     <TextView
                         android:id="@+id/text_rate"
                         android:layout_width="wrap_content"

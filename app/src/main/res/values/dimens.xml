@@ -2,4 +2,5 @@
 <resources>
     <dimen name="detail_padding">20dp</dimen>
     <dimen name="detail_title_font">20sp</dimen>
+    <dimen name="play_button_width">75dp</dimen>
 </resources>

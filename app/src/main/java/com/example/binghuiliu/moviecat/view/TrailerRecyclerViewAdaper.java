@@ -1,17 +1,26 @@
 package com.example.binghuiliu.moviecat.view;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.binghuiliu.moviecat.MainActivity;
 import com.example.binghuiliu.moviecat.R;
+import com.example.binghuiliu.moviecat.helpers.GlobalConstants;
 import com.example.binghuiliu.moviecat.model.Review;
 import com.example.binghuiliu.moviecat.model.Trailer;
 import com.example.binghuiliu.moviecat.utils.NetworkUtils;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -44,9 +53,20 @@ public class TrailerRecyclerViewAdaper extends RecyclerView.Adapter<TrailerRecyc
     }
 
     @Override
-    public void onBindViewHolder(TrailerViewHolder holder, int position) {
+    public void onBindViewHolder(final TrailerViewHolder holder, int position) {
         Trailer trailer = trailerData.get(position);
-        Picasso.with(mContext).load(NetworkUtils.getThumbnailUrl(trailer.key)).into(holder.thumbnail);
+        holder.trailer = trailer;
+        Picasso.with(mContext).load(NetworkUtils.getThumbnailUrl(trailer.key)).into(holder.thumbnail, new Callback() {
+            @Override
+            public void onSuccess() {
+                holder.playButton.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
     @Override
@@ -62,12 +82,36 @@ public class TrailerRecyclerViewAdaper extends RecyclerView.Adapter<TrailerRecyc
 
     public class TrailerViewHolder extends RecyclerView.ViewHolder {
 
-        public @BindView(R.id.trailer_thumbnail_image) ImageView thumbnail;
+        @BindView(R.id.trailer_thumbnail_image) ImageView thumbnail;
+        @BindView(R.id.play_button) ImageButton playButton;
+
+        private final Context context;
+
+        public Trailer trailer;
 
         public TrailerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-        }
+            context = itemView.getContext();
 
+            playButton.setImageResource(android.R.drawable.ic_media_play);
+            playButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Log.d(GlobalConstants.DEBUG, "play trailer");
+                    if (trailer != null) {
+                        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer.key));
+                        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("http://www.youtube.com/watch?v=" + trailer.key));
+                        try {
+                            context.startActivity(appIntent);
+                        } catch (ActivityNotFoundException ex) {
+                            context.startActivity(webIntent);
+                        }
+                    }
+                }
+            });
+        }
     }
 }

@@ -82,16 +82,27 @@ public class MovieDetailActivity extends AppCompatActivity {
         initReviewRecyclerView();
         initTrailerRecyclerView();
 
-        new QueryFavoriteTask().execute();
+        if (savedInstanceState != null) {
+            persistState(savedInstanceState);
+        } else {
+            new ReviewWebTask(mReviewPage).execute(Integer.toString(movieDetails.id));
+            new TrailerWebTask().execute(Integer.toString(movieDetails.id));
+            new QueryFavoriteTask().execute();
+        }
+    }
 
+    private void persistState(Bundle savedInstanceState) {
+        setFavorated(savedInstanceState.getBoolean(getString(R.string.key_favor)));
+        trailers = savedInstanceState.getParcelableArrayList(getString(R.string.key_trailers));
+        trailerAdapter.setTrailerData(trailers);
+        reviews = savedInstanceState.getParcelableArrayList(getString(R.string.key_reviews));
+        reviewAdapter.setReviewData(reviews);
     }
 
     private void initReviewRecyclerView() {
         reviewAdapter = new ReviewRecyclerViewAdaper(this);
         reviewRecyclerView.setAdapter(reviewAdapter);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        new ReviewWebTask(mReviewPage).execute(Integer.toString(movieDetails.id));
     }
 
     private void initTrailerRecyclerView() {
@@ -101,8 +112,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         trailerRecyclerView.setLayoutManager(linearLayoutManager);
-
-        new TrailerWebTask().execute(Integer.toString(movieDetails.id));
     }
 
     private void displayMovieDetails() {
@@ -256,5 +265,13 @@ public class MovieDetailActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(getString(R.string.key_reviews), reviews);
+        outState.putParcelableArrayList(getString(R.string.key_trailers), trailers);
+        outState.putBoolean(getString(R.string.key_favor), isFavorated);
+        super.onSaveInstanceState(outState);
     }
 }

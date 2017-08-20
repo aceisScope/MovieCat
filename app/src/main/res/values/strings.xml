@@ -11,6 +11,9 @@
     <string name="sort_favor">favor</string>
     <string name="key_sort_by">key_sort_by</string>
     <string name="key_movies">key_movies</string>
+    <string name="key_trailers">key_trailers</string>
+    <string name="key_reviews">key_reviews</string>
+    <string name="key_favor">key_favor</string>
 
     <string name="key_results">results</string>
     <string name="key_id">id</string>

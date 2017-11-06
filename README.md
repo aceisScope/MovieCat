@@ -9,7 +9,7 @@ This app is using [The Movie Database](https://www.themoviedb.org/documentation/
 
 * [ButterKnife](https://github.com/JakeWharton/butterknife)
 * [Picasso](square.github.io/picasso/)
-* [okhttp](https://github.com/square/okhttp)
+* []
 
 ## Screens
 
@@ -19,4 +19,4 @@ Main Screen            | Movie Detail
 
 
 ## Android Developer Nanodegree
-[![Udacity](https://cloud.githubusercontent.com/assets/3719141/14508774/c7f6cbce-01d1-11e6-9daf-02bcd10b6400.jpeg)](https://www.udacity.com/course/android-developer-nanodegree--
+[![Udacity](https://cloud.githubusercontent.com/assets/3719141/14508774/c7f6cbce-01d1-11e6-9daf-02bcd10b6400.jpeg)](https://www.udacity.com/course/android-developer-nanodegree-by-google--nd801)
